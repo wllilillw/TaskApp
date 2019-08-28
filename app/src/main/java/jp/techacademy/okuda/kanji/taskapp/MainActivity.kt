@@ -8,6 +8,11 @@ import io.realm.RealmChangeListener
 import io.realm.Sort
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
+import io.realm.RealmResults
+import kotlinx.android.synthetic.main.content_input.*
+
 
 const val EXTRA_TASK = "jp.techacademy.okuda.kanji.taskapp.TASK"
 
@@ -30,6 +35,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+
+
+
         // Realmの設定
         mRealm = Realm.getDefaultInstance()
         mRealm.addChangeListener(mRealmListener)
@@ -46,6 +55,27 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        editText.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                //処理
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //処理
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0 == ""){
+                    reloadListView()
+                }
+                else {
+                    mRealm.where(Task::class.java).equalTo("category", p0.toString()).findAll()
+                    reloadListView()
+                }
+            }
+        })
+
+
         // ListViewを長押ししたときの処理
         listView1.setOnItemLongClickListener { parent, _, position, _ ->
             // タスクを削除する
@@ -59,6 +89,7 @@ class MainActivity : AppCompatActivity() {
 
             builder.setPositiveButton("OK"){_, _ ->
                 val results = mRealm.where(Task::class.java).equalTo("id", task.id).findAll()
+                //
 
                 mRealm.beginTransaction()
                 results.deleteAllFromRealm()
@@ -81,6 +112,8 @@ class MainActivity : AppCompatActivity() {
     private fun reloadListView() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         val taskRealmResults = mRealm.where(Task::class.java).findAll().sort("date", Sort.DESCENDING)
+
+        //タスク表示ここいじる
 
         // 上記の結果を、TaskList としてセットする
         mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
