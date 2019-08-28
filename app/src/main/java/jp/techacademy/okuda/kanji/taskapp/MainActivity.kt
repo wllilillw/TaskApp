@@ -10,6 +10,7 @@ import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.content_input.*
 
@@ -67,10 +68,21 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (p0 == ""){
                     reloadListView()
+                    Log.d("aaa","bbb")
                 }
                 else {
-                    mRealm.where(Task::class.java).equalTo("category", p0.toString()).findAll()
-                    reloadListView()
+                    val taskSearch = mRealm.where(Task::class.java).equalTo("category", p0.toString()).findAll()
+                    Log.d("aaa",p0.toString())
+
+                    // 上記の結果を、TaskList としてセットする
+                    mTaskAdapter.taskList = mRealm.copyFromRealm(taskSearch)
+
+                    // TaskのListView用のアダプタに渡す
+                    listView1.adapter = mTaskAdapter
+
+                    // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+                    mTaskAdapter.notifyDataSetChanged()
+
                 }
             }
         })
