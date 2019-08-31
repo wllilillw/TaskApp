@@ -12,6 +12,8 @@ import java.util.*
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.util.Log
+
 class InputActivity : AppCompatActivity() {
 
     private var mYear = 0
@@ -128,6 +130,7 @@ class InputActivity : AppCompatActivity() {
 
         mTask!!.title = title
         mTask!!.contents = content
+
         mTask!!.mCategory!!.category = category
         val calendar = GregorianCalendar(mYear, mMonth, mDay, mHour, mMinute)
         val date = calendar.time

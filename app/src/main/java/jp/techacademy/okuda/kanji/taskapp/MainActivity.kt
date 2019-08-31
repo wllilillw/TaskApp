@@ -35,10 +35,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, InputActivity::class.java)
             startActivity(intent)
         }
-
-
-
-
+        
 
         // Realmの設定
         mRealm = Realm.getDefaultInstance()
@@ -71,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("aaa","bbb")
                 }
                 else {
-                    val taskSearch = mRealm.where(Task::class.java).equalTo("category", p0.toString()).findAll()
+                    val taskSearch = mRealm.where(Task::class.java).equalTo("mCategory.category", p0.toString()).findAll()
                     Log.d("aaa",p0.toString())
 
                     // 上記の結果を、TaskList としてセットする

@@ -1,6 +1,5 @@
 package jp.techacademy.okuda.kanji.taskapp
 
-import android.renderscript.Sampler
 import java.io.Serializable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
