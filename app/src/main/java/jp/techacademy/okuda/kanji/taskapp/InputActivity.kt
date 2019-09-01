@@ -79,9 +79,12 @@ class InputActivity : AppCompatActivity() {
                 parent: AdapterView<*>?,
                 view: View?, position: Int, id: Long
             ) {
+                val realm = Realm.getDefaultInstance()
                 val spinnerParent = parent as Spinner
                 val item = spinnerParent.selectedItem as String
                 // Kotlin Android Extensions
+                Log.d("aaa",item)
+                mTask = Task()
                 mTask!!.mCategory!!.category = item
             }
 
