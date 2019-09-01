@@ -72,27 +72,7 @@ class InputActivity : AppCompatActivity() {
         // Kotlin Android Extensions
         category_spinner.adapter = adapter
 
-        // リスナーを登録
-        category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            //　アイテムが選択された時
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?, position: Int, id: Long
-            ) {
-                val realm = Realm.getDefaultInstance()
-                val spinnerParent = parent as Spinner
-                val item = spinnerParent.selectedItem as String
-                // Kotlin Android Extensions
-                Log.d("aaa",item)
-                mTask = Task()
-                mTask!!.mCategory!!.category = item
-            }
 
-            //　アイテムが選択されなかった
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //
-            }
-        }
 
 
 
@@ -129,7 +109,6 @@ class InputActivity : AppCompatActivity() {
             // 更新の場合
             title_edit_text.setText(mTask!!.title)
             content_edit_text.setText(mTask!!.contents)
-            category_edit_text.setText(mTask!!.mCategory!!.category)
 
             val calendar = Calendar.getInstance()
             calendar.time = mTask!!.date
@@ -182,13 +161,35 @@ class InputActivity : AppCompatActivity() {
 
         val title = title_edit_text.text.toString()
         val content = content_edit_text.text.toString()
-        val category = category_edit_text.text.toString()
 
         mTask!!.title = title
         mTask!!.contents = content
-        Log.d("aaa",category)
 
-        mTask!!.mCategory!!.category = category
+        // リスナーを登録
+        category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            //　アイテムが選択された時
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?, position: Int, id: Long
+            ) {
+                val realm = Realm.getDefaultInstance()
+                val spinnerParent = parent as Spinner
+                val item = spinnerParent.selectedItem as String
+                // Kotlin Android Extensions
+                Log.d("aaa",item)
+                mTask!!.mCategory!!.category = item
+
+            }
+
+            //　アイテムが選択されなかった
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //
+            }
+        }
+
+
+
+
         val calendar = GregorianCalendar(mYear, mMonth, mDay, mHour, mMinute)
         val date = calendar.time
         mTask!!.date = date
