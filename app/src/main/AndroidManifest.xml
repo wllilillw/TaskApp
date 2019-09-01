@@ -32,6 +32,8 @@
 
         <receiver android:name=".TaskAlarmReceiver"/>
 
+        <activity android:name=".categorySet">
+        </activity>
     </application>
 
 </manifest>

@@ -55,4 +55,13 @@
             android:layout_alignParentRight="true"
             android:text="決定" />
 
+    <Button
+            android:id="@+id/category_button"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/done_button"
+            android:layout_alignParentRight="true"
+            android:text="カテゴリ登録" />
+
+
 </RelativeLayout>

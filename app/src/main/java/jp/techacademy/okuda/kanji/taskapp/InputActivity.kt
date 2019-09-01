@@ -13,6 +13,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_category.*
 
 class InputActivity : AppCompatActivity() {
 
@@ -50,6 +51,9 @@ class InputActivity : AppCompatActivity() {
         addTask()
         finish()
     }
+    private val mOnCategoryClickListener = View.OnClickListener {
+        addCategory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +70,7 @@ class InputActivity : AppCompatActivity() {
         date_button.setOnClickListener(mOnDateClickListener)
         times_button.setOnClickListener(mOnTimeClickListener)
         done_button.setOnClickListener(mOnDoneClickListener)
+        category_button.setOnClickListener(mOnCategoryClickListener)
 
         // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         val intent = intent
@@ -103,6 +108,11 @@ class InputActivity : AppCompatActivity() {
             date_button.text = dateString
             times_button.text = timeString
         }
+    }
+
+    private fun addCategory(){
+        val intent = Intent(this, categorySet::class.java)
+        startActivity(intent)
     }
 
     private fun addTask() {
