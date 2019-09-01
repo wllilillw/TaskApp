@@ -70,6 +70,7 @@ class InputActivity : AppCompatActivity() {
         // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         val intent = intent
         val taskId = intent.getIntExtra(EXTRA_TASK, -1)
+
         val realm = Realm.getDefaultInstance()
         mTask = realm.where(Task::class.java).equalTo("id", taskId).findFirst()
         realm.close()
@@ -114,6 +115,7 @@ class InputActivity : AppCompatActivity() {
             mTask = Task()
 
             val taskRealmResults = realm.where(Task::class.java).findAll()
+            val categoryRealmResult=realm.where(Category::class.java).findAll()
 
             val identifier: Int =
                 if (taskRealmResults.max("id") != null) {
@@ -121,7 +123,14 @@ class InputActivity : AppCompatActivity() {
                 } else {
                     0
                 }
+            val identifierCategory: Int =
+                if (categoryRealmResult.max("id") != null) {    //might be 0
+                    categoryRealmResult.max("id")!!.toInt() + 1
+                } else {
+                    0
+                }
             mTask!!.id = identifier
+            mTask!!.mCategory!!.id=identifierCategory
         }
 
         val title = title_edit_text.text.toString()
