@@ -58,7 +58,7 @@ class categorySet : AppCompatActivity() {
             mCategory!!.id = identifier
         }
 
-        val category = textCategorySet.toString()
+        val category = textCategorySet.text.toString()
 
         mCategory!!.category = category
 
