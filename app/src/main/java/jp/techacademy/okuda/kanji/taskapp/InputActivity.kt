@@ -13,6 +13,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
+import android.widget.AdapterView
+import android.widget.Spinner
+import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_category.*
 
 class InputActivity : AppCompatActivity() {
@@ -23,6 +26,7 @@ class InputActivity : AppCompatActivity() {
     private var mHour = 0
     private var mMinute = 0
     private var mTask: Task? = null
+    private val spinnerItems = arrayOf("Spinner", "Android", "Apple", "Windows")
 
     private val mOnDateClickListener = View.OnClickListener {
         val datePickerDialog = DatePickerDialog(this,
@@ -59,7 +63,37 @@ class InputActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        // ActionBarを設定する
+        // ArrayAdapter
+        val adapter = ArrayAdapter(applicationContext,
+            android.R.layout.simple_spinner_item, spinnerItems)
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // spinner に adapter をセット
+        // Kotlin Android Extensions
+        category_spinner.adapter = adapter
+
+        // リスナーを登録
+        category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            //　アイテムが選択された時
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?, position: Int, id: Long
+            ) {
+                val spinnerParent = parent as Spinner
+                val item = spinnerParent.selectedItem as String
+                // Kotlin Android Extensions
+                mTask!!.mCategory!!.category = item
+            }
+
+            //　アイテムが選択されなかった
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //
+            }
+        }
+
+
+
+            // ActionBarを設定する
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {

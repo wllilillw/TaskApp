@@ -63,5 +63,14 @@
             android:layout_alignParentRight="true"
             android:text="カテゴリ登録" />
 
+    <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/category_edit_text"
+            android:layout_alignParentRight="true" android:layout_marginTop="19dp" android:layout_marginRight="217dp"
+            android:layout_toStartOf="@+id/done_button" android:layout_marginEnd="105dp"
+    />
+
 
 </RelativeLayout>
