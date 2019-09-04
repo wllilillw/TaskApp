@@ -17,6 +17,7 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_category.*
+import kotlin.collections.ArrayList
 
 class InputActivity : AppCompatActivity() {
 
@@ -26,7 +27,10 @@ class InputActivity : AppCompatActivity() {
     private var mHour = 0
     private var mMinute = 0
     private var mTask: Task? = null
-    private val spinnerItems = arrayOf("Spinner", "Android", "Apple", "Windows")
+    private var mCategory: Category? = Category()
+    private var mcategorySet=categorySet()
+    private var spinnerItems :MutableList<String> = arrayListOf()
+
 
     private val mOnDateClickListener = View.OnClickListener {
         val datePickerDialog = DatePickerDialog(this,
@@ -63,25 +67,6 @@ class InputActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        // ArrayAdapter
-        val adapter = ArrayAdapter(applicationContext,
-            android.R.layout.simple_spinner_item, spinnerItems)
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // spinner に adapter をセット
-        // Kotlin Android Extensions
-        category_spinner.adapter = adapter
-
-
-
-
-
-            // ActionBarを設定する
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        }
 
         // UI部品の設定
         date_button.setOnClickListener(mOnDateClickListener)
@@ -92,10 +77,50 @@ class InputActivity : AppCompatActivity() {
         // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         val intent = intent
         val taskId = intent.getIntExtra(EXTRA_TASK, -1)
+        val categoryId = intent.getIntExtra(EXTRA_CATEGORY, -1)
 
         val realm = Realm.getDefaultInstance()
         mTask = realm.where(Task::class.java).equalTo("id", taskId).findFirst()
+        mCategory = realm.where(Category::class.java).equalTo("id", categoryId).findFirst()
         realm.close()
+
+        // ArrayAdapter
+        val adapter = ArrayAdapter(applicationContext,
+            android.R.layout.simple_spinner_item, spinnerItems)
+        val categoryRealmResults = realm.where(Category::class.java).findAll()
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        Log.d("aaa",categoryId.toString())
+
+        // Kotlin Android Extensions
+        if (categoryId == -1){
+            category_spinner_textView.text="カテゴリーが登録されていません"
+        }else{
+
+            category_spinner_textView.text="カテゴリーを選択"
+            var i: Int = 1
+            while (i <= mCategory!!.id) {
+                mCategory!!.id = i
+                Log.d("aaa", mCategory!!.category)
+                spinnerItems.add(mCategory!!.category)
+                i += 1
+            }
+            spinnerItems= arrayListOf("aa","nnn")
+
+
+        }
+
+        // spinner に adapter をセット
+        category_spinner.adapter = adapter
+
+
+        // ActionBarを設定する
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        if (supportActionBar != null) {
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        }
+
 
         if (mTask == null) {
             // 新規作成の場合
@@ -164,6 +189,7 @@ class InputActivity : AppCompatActivity() {
 
         mTask!!.title = title
         mTask!!.contents = content
+
 
         // リスナーを登録
         category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
