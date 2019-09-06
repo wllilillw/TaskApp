@@ -15,11 +15,20 @@ import android.content.Intent
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.Spinner
+import io.realm.RealmChangeListener
 import android.widget.ArrayAdapter
+import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_category.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.collections.ArrayList
 
 class InputActivity : AppCompatActivity() {
+    private lateinit var mRealm: Realm
+    private val mRealmListener = object : RealmChangeListener<Realm> {
+        override fun onChange(element: Realm) {
+            setCategoryList()
+        }
+    }
 
     private var mYear = 0
     private var mMonth = 0
@@ -30,7 +39,6 @@ class InputActivity : AppCompatActivity() {
     private var mCategory: Category? = Category()
     private var mcategorySet=categorySet()
     private var spinnerItems :MutableList<String> = arrayListOf()
-
 
     private val mOnDateClickListener = View.OnClickListener {
         val datePickerDialog = DatePickerDialog(this,
@@ -67,6 +75,11 @@ class InputActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
+        // Realmの設定
+        mRealm = Realm.getDefaultInstance()
+        mRealm.addChangeListener(mRealmListener)
+
+
 
         // UI部品の設定
         date_button.setOnClickListener(mOnDateClickListener)
@@ -82,36 +95,16 @@ class InputActivity : AppCompatActivity() {
         val realm = Realm.getDefaultInstance()
         mTask = realm.where(Task::class.java).equalTo("id", taskId).findFirst()
         mCategory = realm.where(Category::class.java).equalTo("id", categoryId).findFirst()
+        //val categoryRealmResults = realm.where(Category::class.java).findAll()
         realm.close()
 
-        // ArrayAdapter
-        val adapter = ArrayAdapter(applicationContext,
-            android.R.layout.simple_spinner_item, spinnerItems)
-        val categoryRealmResults = realm.where(Category::class.java).findAll()
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        Log.d("aaa",categoryId.toString())
 
         // Kotlin Android Extensions
-        if (categoryId == -1){
+        if (mCategory == null){
             category_spinner_textView.text="カテゴリーが登録されていません"
         }else{
-
             category_spinner_textView.text="カテゴリーを選択"
-            var i: Int = 1
-            while (i <= mCategory!!.id) {
-                mCategory!!.id = i
-                Log.d("aaa", mCategory!!.category)
-                spinnerItems.add(mCategory!!.category)
-                i += 1
-            }
-            spinnerItems= arrayListOf("aa","nnn")
-
-
         }
-
-        // spinner に adapter をセット
-        category_spinner.adapter = adapter
 
 
         // ActionBarを設定する
@@ -191,6 +184,8 @@ class InputActivity : AppCompatActivity() {
         mTask!!.contents = content
 
 
+
+
         // リスナーを登録
         category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             //　アイテムが選択された時
@@ -237,4 +232,45 @@ class InputActivity : AppCompatActivity() {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, resultPendingIntent)
     }
+
+    private fun setCategoryList() {
+        // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+        val categoryRealmResults = mRealm.where(Category::class.java).findAll()
+        //val results = mRealm.where(Category::class.java).equalTo("category", mCategory!!.id).findAll()
+        if (categoryRealmResults != null) {
+
+
+
+
+
+            val loopEnd = categoryRealmResults.max("id")!!.toInt()
+
+
+
+
+
+            var i: Int = 0
+            while (i < loopEnd) {
+                //Log.d("aaax", mTask!!.mCategory!!.category)
+                spinnerItems.add(categoryRealmResults[i]!!.category)
+                i += 1
+            }
+            Log.d("aaass", spinnerItems.toString())
+
+            //return spinnerItems
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        setCategoryList()
+
+        // ArrayAdapter
+        val adapter = ArrayAdapter(applicationContext,
+            android.R.layout.simple_spinner_item, spinnerItems)
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // spinner に adapter をセット
+        category_spinner.adapter = adapter
+    }
+
 }
