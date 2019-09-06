@@ -240,13 +240,7 @@ class InputActivity : AppCompatActivity() {
         if (categoryRealmResults != null) {
 
 
-
-
-
             val loopEnd = categoryRealmResults.max("id")!!.toInt()
-
-
-
 
 
             var i: Int = 0
@@ -255,14 +249,18 @@ class InputActivity : AppCompatActivity() {
                 spinnerItems.add(categoryRealmResults[i]!!.category)
                 i += 1
             }
+        }
             Log.d("aaass", spinnerItems.toString())
 
             //return spinnerItems
-        }
+
+
     }
     override fun onResume() {
         super.onResume()
+
         setCategoryList()
+
 
         // ArrayAdapter
         val adapter = ArrayAdapter(applicationContext,

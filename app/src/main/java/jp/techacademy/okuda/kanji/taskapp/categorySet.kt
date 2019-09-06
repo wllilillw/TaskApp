@@ -38,7 +38,7 @@ class categorySet : AppCompatActivity() {
 
     private fun addCategory2() {
         val realm = Realm.getDefaultInstance()
-        
+
         realm.beginTransaction()
 
 

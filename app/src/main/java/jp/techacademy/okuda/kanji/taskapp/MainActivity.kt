@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.content_input.*
 
 
 const val EXTRA_TASK = "jp.techacademy.okuda.kanji.taskapp.TASK"
+const val EXTRA_CATEGORY="jp.techacademy.okuda.kanji.taskapp.CATEGORY"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mRealm: Realm

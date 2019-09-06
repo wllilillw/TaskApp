@@ -13,6 +13,7 @@ import android.os.Build
 import io.realm.Realm
 
 class TaskAlarmReceiver : BroadcastReceiver() {
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val notificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

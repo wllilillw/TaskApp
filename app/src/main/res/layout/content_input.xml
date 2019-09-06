@@ -18,18 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="タイトル" />
+
     <EditText
         android:id="@+id/content_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_edit_text"
         android:hint="内容" />
-    <EditText
-            android:id="@+id/category_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/date_button"
-            android:hint="カテゴリ" />
+
     <Button
             android:id="@+id/date_button"
             android:layout_width="0dp"
@@ -51,7 +47,7 @@
             android:id="@+id/done_button"
             android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/category_edit_text"
+            android:layout_below="@id/category_spinner"
             android:layout_alignParentRight="true"
             android:text="決定" />
 
@@ -61,16 +57,22 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/done_button"
             android:layout_alignParentRight="true"
-            android:text="カテゴリ登録" />
+            android:text="カテゴリ新規登録" />
 
     <Spinner
             android:id="@+id/category_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/category_edit_text"
-            android:layout_alignParentRight="true" android:layout_marginTop="19dp" android:layout_marginRight="217dp"
-            android:layout_toStartOf="@+id/done_button" android:layout_marginEnd="105dp"
+            android:layout_below="@id/category_spinner_textView"
     />
+    <TextView
+            android:id="@+id/category_spinner_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_button"
+            android:text="カテゴリを選択"
+    />
+
 
 
 </RelativeLayout>
