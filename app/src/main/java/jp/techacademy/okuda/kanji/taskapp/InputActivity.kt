@@ -237,7 +237,7 @@ class InputActivity : AppCompatActivity() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         val categoryRealmResults = mRealm.where(Category::class.java).findAll()
         //val results = mRealm.where(Category::class.java).equalTo("category", mCategory!!.id).findAll()
-        if (categoryRealmResults != null) {
+        if (categoryRealmResults.max("id") != null) {
 
 
             val loopEnd = categoryRealmResults.max("id")!!.toInt()
