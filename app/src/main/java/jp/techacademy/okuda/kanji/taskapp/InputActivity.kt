@@ -80,7 +80,6 @@ class InputActivity : AppCompatActivity() {
         mRealm.addChangeListener(mRealmListener)
 
 
-
         // UI部品の設定
         date_button.setOnClickListener(mOnDateClickListener)
         times_button.setOnClickListener(mOnTimeClickListener)
@@ -95,9 +94,7 @@ class InputActivity : AppCompatActivity() {
         val realm = Realm.getDefaultInstance()
         mTask = realm.where(Task::class.java).equalTo("id", taskId).findFirst()
         mCategory = realm.where(Category::class.java).equalTo("id", categoryId).findFirst()
-        //val categoryRealmResults = realm.where(Category::class.java).findAll()
         realm.close()
-
 
         // Kotlin Android Extensions
         if (mCategory == null){
@@ -105,6 +102,8 @@ class InputActivity : AppCompatActivity() {
         }else{
             category_spinner_textView.text="カテゴリーを選択"
         }
+        //val categoryRealmResults = realm.where(Category::class.java).findAll()
+
 
 
         // ActionBarを設定する
@@ -113,7 +112,6 @@ class InputActivity : AppCompatActivity() {
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
-
 
         if (mTask == null) {
             // 新規作成の場合
@@ -147,6 +145,9 @@ class InputActivity : AppCompatActivity() {
     private fun addCategory(){
         val intent = Intent(this, categorySet::class.java)
         startActivity(intent)
+
+        setCategoryList()
+
     }
 
     private fun addTask() {
@@ -197,9 +198,9 @@ class InputActivity : AppCompatActivity() {
                 val spinnerParent = parent as Spinner
                 val item = spinnerParent.selectedItem as String
                 // Kotlin Android Extensions
-                Log.d("aaa",item)
+                Log.d("bbb",item)
                 mTask!!.mCategory!!.category = item
-
+                mTask!!.categoryText=item
             }
 
             //　アイテムが選択されなかった
@@ -237,20 +238,20 @@ class InputActivity : AppCompatActivity() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         val categoryRealmResults = mRealm.where(Category::class.java).findAll()
         //val results = mRealm.where(Category::class.java).equalTo("category", mCategory!!.id).findAll()
-        if (categoryRealmResults.max("id") != null) {
+        val loopEndString = categoryRealmResults!!.max("id")
+        if (loopEndString != null) {
 
 
-            val loopEnd = categoryRealmResults.max("id")!!.toInt()
-
+            val loopEnd = loopEndString.toInt()
+            spinnerItems = arrayListOf()
 
             var i: Int = 0
-            while (i < loopEnd) {
+            while (i < loopEnd+1) {
                 //Log.d("aaax", mTask!!.mCategory!!.category)
                 spinnerItems.add(categoryRealmResults[i]!!.category)
                 i += 1
             }
         }
-            Log.d("aaass", spinnerItems.toString())
 
             //return spinnerItems
 
@@ -270,5 +271,6 @@ class InputActivity : AppCompatActivity() {
         // spinner に adapter をセット
         category_spinner.adapter = adapter
     }
+
 
 }
