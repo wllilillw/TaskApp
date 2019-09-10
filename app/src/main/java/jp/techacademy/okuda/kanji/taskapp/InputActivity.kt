@@ -140,6 +140,29 @@ class InputActivity : AppCompatActivity() {
             date_button.text = dateString
             times_button.text = timeString
         }
+        // リスナーを登録
+        category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            //　アイテムが選択された時
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?, position: Int, id: Long
+            ) {
+                val realm = Realm.getDefaultInstance()
+                val spinnerParent = parent as Spinner
+                val item = spinnerParent.selectedItem as String
+                // Kotlin Android Extensions
+                Log.d("bbb",item)
+                mTask!!.mCategory!!.category = item
+                mTask!!.categoryText=item
+            }
+
+            //　アイテムが選択されなかった
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //
+            }
+        }
+
+
     }
 
     private fun addCategory(){
@@ -185,29 +208,6 @@ class InputActivity : AppCompatActivity() {
         mTask!!.contents = content
 
 
-
-
-        // リスナーを登録
-        category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            //　アイテムが選択された時
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?, position: Int, id: Long
-            ) {
-                val realm = Realm.getDefaultInstance()
-                val spinnerParent = parent as Spinner
-                val item = spinnerParent.selectedItem as String
-                // Kotlin Android Extensions
-                Log.d("bbb",item)
-                mTask!!.mCategory!!.category = item
-                mTask!!.categoryText=item
-            }
-
-            //　アイテムが選択されなかった
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //
-            }
-        }
 
 
 
