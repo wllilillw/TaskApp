@@ -19,7 +19,6 @@ class categorySet : AppCompatActivity() {
     //var categoryList: MutableList<String> = arrayListOf()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_set)
@@ -51,15 +50,21 @@ class categorySet : AppCompatActivity() {
 
         val category = textCategorySet.text.toString()
 
-        mCategory!!.category = category
+        //val judgeExistCategory = realm.where(Category::class.java).equalTo("categoryText",category).findAll()
 
-        realm.copyToRealmOrUpdate(mCategory)
-        realm.commitTransaction()
+        //if (judgeExistCategory == null) {
 
-        realm.close()
-        finish()
+            mCategory!!.category = category
+
+            realm.copyToRealmOrUpdate(mCategory!!)
+            realm.commitTransaction()
+        //}
+
+            realm.close()
+            finish()
+
+
     }
 
+    }
 
-
-}
