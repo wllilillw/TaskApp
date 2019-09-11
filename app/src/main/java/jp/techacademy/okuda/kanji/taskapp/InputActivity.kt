@@ -140,6 +140,25 @@ class InputActivity : AppCompatActivity() {
             date_button.text = dateString
             times_button.text = timeString
         }
+
+
+
+
+    }
+
+    private fun addCategory(){
+        val intent = Intent(this, categorySet::class.java)
+        startActivity(intent)
+
+        setCategoryList()
+
+    }
+
+
+
+
+
+    private fun addTask() {
         // リスナーを登録
         category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             //　アイテムが選択された時
@@ -153,7 +172,6 @@ class InputActivity : AppCompatActivity() {
                 // Kotlin Android Extensions
                 Log.d("bbb",item)
                 mTask!!.mCategory!!.category = item
-                mTask!!.categoryText=item
             }
 
             //　アイテムが選択されなかった
@@ -161,20 +179,8 @@ class InputActivity : AppCompatActivity() {
                 //
             }
         }
-
-
-    }
-
-    private fun addCategory(){
-        val intent = Intent(this, categorySet::class.java)
-        startActivity(intent)
-
-        setCategoryList()
-
-    }
-
-    private fun addTask() {
         val realm = Realm.getDefaultInstance()
+        val spinnerItem= category_spinner.selectedItem as String
 
         realm.beginTransaction()
 
@@ -199,13 +205,22 @@ class InputActivity : AppCompatActivity() {
                 }
             mTask!!.id = identifier
             mTask!!.mCategory!!.id=identifierCategory
+            mTask!!.categoryText=spinnerItem
         }
 
         val title = title_edit_text.text.toString()
         val content = content_edit_text.text.toString()
 
+
         mTask!!.title = title
         mTask!!.contents = content
+        mTask!!.categoryText=spinnerItem
+
+
+
+
+
+
 
 
 
@@ -253,7 +268,7 @@ class InputActivity : AppCompatActivity() {
             }
         }
 
-            //return spinnerItems
+        //return spinnerItems
 
 
     }
