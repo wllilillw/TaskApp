@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     val taskSeachText=mRealm.where(Task::class.java).findAll()
-                    val taskSearch = mRealm.where(Task::class.java).equalTo("categoryText", p0.toString()).findAll()
+                    val taskSearch = mRealm.where(Task::class.java).equalTo("mCategory.category", p0.toString()).findAll()
                     Log.d("aaa",taskSeachText.toString())
 
                     // 上記の結果を、TaskList としてセットする

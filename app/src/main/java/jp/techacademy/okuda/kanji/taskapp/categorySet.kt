@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import io.realm.Realm
 import android.util.Log
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_category.*
 
 class categorySet : AppCompatActivity() {
@@ -31,6 +32,9 @@ class categorySet : AppCompatActivity() {
         val realm = Realm.getDefaultInstance()
 
         realm.beginTransaction()
+        val category = textCategorySet.text.toString()
+        val categorySearchResult = realm.where(Category::class.java).equalTo("category", category).findAll()
+        val categoryResultText=categorySearchResult.toString()
 
 
         if (mCategory == null) {
@@ -41,28 +45,27 @@ class categorySet : AppCompatActivity() {
 
             val identifier: Int =
                 if (categoryRealmResults2.max("id") != null) {
-                    categoryRealmResults2.max("id")!!.toInt()
+                    categoryRealmResults2.max("id")!!.toInt()+1
                 } else {
                     0
                 }
             mCategory!!.id = identifier
         }
-
-        val category = textCategorySet.text.toString()
-
-        //val judgeExistCategory = realm.where(Category::class.java).equalTo("categoryText",category).findAll()
-
-        //if (judgeExistCategory == null) {
+            if (categorySearchResult.size != 0){
+                realm.close()
+                finish()
+                return
+            }
 
             mCategory!!.category = category
 
             realm.copyToRealmOrUpdate(mCategory!!)
             realm.commitTransaction()
-        //}
+            //}
 
             realm.close()
             finish()
-
+        //}
 
     }
 

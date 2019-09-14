@@ -96,12 +96,7 @@ class InputActivity : AppCompatActivity() {
         mCategory = realm.where(Category::class.java).equalTo("id", categoryId).findFirst()
         realm.close()
 
-        // Kotlin Android Extensions
-        if (mCategory == null){
-            category_spinner_textView.text="カテゴリーが登録されていません"
-        }else{
-            category_spinner_textView.text="カテゴリーを選択"
-        }
+
         //val categoryRealmResults = realm.where(Category::class.java).findAll()
 
 
@@ -142,8 +137,6 @@ class InputActivity : AppCompatActivity() {
         }
 
 
-
-
     }
 
     private fun addCategory(){
@@ -159,6 +152,7 @@ class InputActivity : AppCompatActivity() {
 
 
     private fun addTask() {
+
         // リスナーを登録
         category_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             //　アイテムが選択された時
@@ -180,9 +174,22 @@ class InputActivity : AppCompatActivity() {
             }
         }
         val realm = Realm.getDefaultInstance()
-        val spinnerItem= category_spinner.selectedItem as String
+        val spinnerItem= category_spinner.selectedItem as String?
 
+        if (spinnerItem == null){
+            category_spinner_textView.text="カテゴリーが登録されていません"
+            return
+        }
+        var categoryset = realm.where(Category::class.java).equalTo("category", spinnerItem).findFirst()
+        // Kotlin Android Extensions
+        if (categoryset == null){
+            category_spinner_textView.text="カテゴリーが登録されていません"
+            return
+        }else{
+            category_spinner_textView.text="カテゴリーを選択"
+        }
         realm.beginTransaction()
+
 
         if (mTask == null) {
             // 新規作成の場合
@@ -197,16 +204,14 @@ class InputActivity : AppCompatActivity() {
                 } else {
                     0
                 }
-            val identifierCategory: Int =
-                if (categoryRealmResult.max("id") != null) {    //might be 0
-                    categoryRealmResult.max("id")!!.toInt() + 1
-                } else {
-                    0
-                }
+
             mTask!!.id = identifier
-            mTask!!.mCategory!!.id=identifierCategory
-            mTask!!.categoryText=spinnerItem
+            //mTask!!.mCategory!!.id=identifierCategory
+            //mTask!!.Category. = spinnerItem
         }
+
+        mTask!!.mCategory = categoryset
+
 
         val title = title_edit_text.text.toString()
         val content = content_edit_text.text.toString()
@@ -214,14 +219,7 @@ class InputActivity : AppCompatActivity() {
 
         mTask!!.title = title
         mTask!!.contents = content
-        mTask!!.categoryText=spinnerItem
-
-
-
-
-
-
-
+        //mTask!!.categoryText = spinnerItem
 
 
 
@@ -262,9 +260,11 @@ class InputActivity : AppCompatActivity() {
 
             var i: Int = 0
             while (i < loopEnd+1) {
-                //Log.d("aaax", mTask!!.mCategory!!.category)
-                spinnerItems.add(categoryRealmResults[i]!!.category)
-                i += 1
+                    //Log.d("aaax", mTask!!.mCategory!!.category)
+                    spinnerItems.add(categoryRealmResults[i]!!.category)
+
+                    i += 1
+
             }
         }
 
